@@ -660,7 +660,7 @@ RunGame_Bank3: ; buttons saved in b
 	ret
 .victory
 	ld a, [CurrentLevel]
-	inc a
+	dec a
 	ld [CurrentLevel], a
 	ret
 
