@@ -1,0 +1,105 @@
+CreateColor 0, 0, 0
+CreateColor 0, 0, 0
+CreateColor 0, 0, 0
+CreateColor 0, 0, 0
+
+CreateColor 0, 0, 0
+CreateColor 15, 12, 13
+CreateColor 45, 18, 12
+CreateColor 0, 0, 0
+
+CreateColor 0, 0, 0
+CreateColor 15, 12, 13
+CreateColor 45, 18, 12
+CreateColor 72, 58, 57
+
+CreateColor 0, 0, 0
+CreateColor 31, 6, 7
+CreateColor 38, 26, 13
+CreateColor 0, 0, 0
+
+CreateColor 0, 0, 0
+CreateColor 31, 6, 7
+CreateColor 38, 26, 13
+CreateColor 43, 42, 25
+
+CreateColor 0, 0, 0
+CreateColor 38, 26, 13
+CreateColor 43, 42, 25
+CreateColor 0, 0, 0
+
+CreateColor 0, 0, 0
+CreateColor 43, 43, 43
+CreateColor 70, 32, 24
+CreateColor 0, 0, 0
+
+CreateColor 0, 0, 0
+CreateColor 43, 43, 43
+CreateColor 70, 32, 24
+CreateColor 172, 172, 172
+
+CreateColor 0, 0, 0
+CreateColor 51, 50, 51
+CreateColor 184, 164, 163
+CreateColor 0, 0, 0
+
+CreateColor 0, 0, 0
+CreateColor 52, 0, 54
+CreateColor 194, 189, 114
+CreateColor 206, 96, 51
+
+CreateColor 0, 0, 0
+CreateColor 52, 0, 54
+CreateColor 206, 96, 51
+CreateColor 0, 0, 0
+
+CreateColor 0, 0, 0
+CreateColor 137, 26, 31
+CreateColor 172, 116, 56
+CreateColor 0, 0, 0
+
+CreateColor 0, 0, 0
+CreateColor 137, 26, 31
+CreateColor 172, 116, 56
+CreateColor 194, 189, 114
+
+CreateColor 0, 0, 0
+CreateColor 137, 26, 31
+CreateColor 194, 189, 114
+CreateColor 0, 0, 0
+
+CreateColor 0, 0, 0
+CreateColor 172, 116, 56
+CreateColor 194, 189, 114
+CreateColor 0, 0, 0
+
+CreateColor 5, 4, 5
+CreateColor 16, 6, 4
+CreateColor 25, 20, 20
+CreateColor 0, 0, 0
+
+CreateColor 11, 11, 11
+CreateColor 41, 37, 36
+CreateColor 0, 0, 0
+CreateColor 0, 0, 0
+
+CreateColor 12, 0, 12
+CreateColor 13, 4, 32
+CreateColor 43, 42, 25
+CreateColor 46, 21, 11
+
+CreateColor 15, 12, 13
+CreateColor 45, 18, 12
+CreateColor 72, 58, 57
+CreateColor 0, 0, 0
+
+CreateColor 51, 50, 51
+CreateColor 184, 164, 163
+CreateColor 0, 0, 0
+CreateColor 0, 0, 0
+
+CreateColor 52, 0, 54
+CreateColor 58, 17, 141
+CreateColor 194, 189, 114
+CreateColor 206, 96, 51
+

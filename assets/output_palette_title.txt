@@ -1,0 +1,4 @@
+CreateColor 0, 0, 0
+CreateColor 54, 54, 54
+CreateColor 108, 108, 108
+CreateColor 108, 108, 108
