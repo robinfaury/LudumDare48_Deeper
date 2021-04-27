@@ -3,7 +3,7 @@
 <div style="text-align:center"><img src="./images/LD48_game.gif" width="256"></img></div>
 
 ## Update
-The V2 is available!
+The V2 is available! https://github.com/robinfaury/LudumDare48_Deeper/releases/tag/V2.0.0 
 This version should be out of the LudumDare competition. It provide:
  - B button to reset the level
  - the score
