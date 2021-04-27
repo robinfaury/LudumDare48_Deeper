@@ -327,10 +327,10 @@ SpritePalette:
 	CreateColor 184, 164, 163
 	CreateColor 255, 255, 255
 	; %10011000
-	CreateColor 255, 0, 255
-	CreateColor 255, 0, 255
-	CreateColor 255, 0, 255
-	CreateColor 255, 0, 255
+	CreateColor 0, 0, 0
+	CreateColor 255, 255, 255
+	CreateColor 255, 255, 255
+	CreateColor 255, 255, 255
 	; %10010000
 	CreateColor 0, 0, 0
 	CreateColor 0, 0, 0

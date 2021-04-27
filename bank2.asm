@@ -91,6 +91,9 @@ SetupLvl_Bank2:
 	ld bc, 20
 	call mem_Copy
 
+	ld a, $00
+	ld [rSCY], a
+
 	call LCD_Start
 
 	ret

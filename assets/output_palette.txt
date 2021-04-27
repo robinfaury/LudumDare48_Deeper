@@ -73,6 +73,11 @@ CreateColor 172, 116, 56
 CreateColor 194, 189, 114
 CreateColor 0, 0, 0
 
+CreateColor 0, 0, 0
+CreateColor 255, 255, 255
+CreateColor 0, 0, 0
+CreateColor 0, 0, 0
+
 CreateColor 5, 4, 5
 CreateColor 16, 6, 4
 CreateColor 25, 20, 20

@@ -24,7 +24,15 @@ CanDigStone EQU CanDigDirt+1
 CanDigMetal EQU CanDigStone+1
 CanDigAlien EQU CanDigMetal+1
 CannotDig EQU CanDigAlien+1
-DigPattern EQU CannotDig+1
+AnimationEnd EQU CannotDig+1
+Score EQU AnimationEnd+1
+SaveScore EQU Score+1
+SaveDig EQU SaveScore+1
+SavePosition EQU SaveDig+1
+SaveOrient EQU SavePosition+1
+SaveMapCurrentRowPtr EQU SaveOrient+1
+SavePaletteCurrentRowPtr EQU SaveMapCurrentRowPtr+2
+DigPattern EQU SavePaletteCurrentRowPtr+2
 
 POSTURE_NORMAL EQU 0
 POSTURE_RIGHT EQU 1
@@ -79,15 +87,19 @@ SetupLvl_Bank3:
 	ld hl, map_Bank3+$20*$02
 	ld a, h
 	ld [MapCurrentRowPtr+0], a
+	ld [SaveMapCurrentRowPtr+0], a
 	ld a, l
 	ld [MapCurrentRowPtr+1], a
+	ld [SaveMapCurrentRowPtr+1], a
 	ld a, 30
 	ld [PaletteCurrentRow], a
 	ld hl, palette_Bank3+$20*$02
 	ld a, h
 	ld [PaletteCurrentRowPtr+0], a
+	ld [SavePaletteCurrentRowPtr+0], a
 	ld a, l
 	ld [PaletteCurrentRowPtr+1], a
+	ld [SavePaletteCurrentRowPtr+1], a
 	ld a, $00
 	call ResetSkill
 
@@ -156,6 +168,62 @@ SetupLvl_Bank3:
 	ld a, $00
 	ld [DigPattern+31], a
 
+	ld a, $00
+	ld [Score], a
+	ld [SaveScore], a
+	ld [SaveDig], a
+	ld a, POSTURE_NORMAL
+	ld [SaveOrient], a
+
+	ld a, $20
+	ld [AnimationEnd], a
+
+	ld a, $98
+	ld [Sprite05], a
+	ld [Sprite06], a
+	ld [Sprite07], a
+	ld [Sprite08], a
+	ld [Sprite09], a
+	ld [Sprite10], a
+	ld [Sprite11], a
+	ld a, %00000101
+	ld [Sprite05+3], a
+	ld [Sprite06+3], a
+	ld [Sprite07+3], a
+	ld [Sprite08+3], a
+	ld [Sprite09+3], a
+	ld [Sprite10+3], a
+	ld [Sprite11+3], a
+
+	ld a, $68
+	ld [Sprite05+1], a
+	ld a, $CA
+	ld [Sprite05+2], a
+	ld a, $70
+	ld [Sprite06+1], a
+	ld a, $CB
+	ld [Sprite06+2], a
+	ld a, $78
+	ld [Sprite07+1], a
+	ld a, $CC
+	ld [Sprite07+2], a
+	ld a, $80
+	ld [Sprite08+1], a
+	ld a, $CD
+	ld [Sprite08+2], a
+	ld a, $88
+	ld [Sprite09+1], a
+	ld a, $CE
+	ld [Sprite09+2], a
+	ld a, $98
+	ld [Sprite10+1], a
+	ld a, $C0
+	ld [Sprite10+2], a
+	ld a, $A0
+	ld [Sprite11+1], a
+	ld a, $C0
+	ld [Sprite11+2], a
+
 	call LCD_Start
 
 	ld b, $00
@@ -165,6 +233,7 @@ SetupLvl_Bank3:
 	ld [Sprite01], a
 	ld a, $18
 	ld [Sprite01+1], a
+	ld [SavePosition], a
 	ld a, %00000000
 	ld [Sprite01+3], a
 
@@ -236,6 +305,21 @@ Move_Bank3:
 	ld [Sprite04+1], a
 	ret
 
+UpdateScore:
+	ld a, [Sprite11+2]
+	inc a
+	cp $C0+10
+	jr z, .inc_ten
+	ld [Sprite11+2], a
+	ret
+.inc_ten
+	ld a, $C0
+	ld [Sprite11+2], a
+	ld a, [Sprite10+2]
+	inc a
+	ld [Sprite10+2], a
+	ret
+
 Animate_Bank3:
 	ld a, [AnimationType]
 	cp ANIMATION_TYPE_FALL
@@ -303,6 +387,13 @@ Animate_Bank3:
 .end_scroll
 	ld a, $00
 	ld [Animation], a
+	ld a, [Score]
+	inc a
+	ld [Score], a
+	call UpdateScore
+	ld a, [Score]
+	cp 66
+	jp nc, .dont_scroll
 	ld a, [MapCurrentRow]
 	add a, 2
 	cp 32
@@ -349,6 +440,38 @@ Animate_Bank3:
 	call mem_CopyVRAM
 	ld a, $00
 	ld [rVRAM_BANK], a
+	ld a, [Score]
+	cp 16
+	jr z, .save
+	cp 34
+	jr z, .save
+	cp 25
+	jr z, .save
+	cp 42
+	jr z, .save
+	cp 50
+	jr z, .save
+	cp 58
+	jr z, .save
+	jr .end_save
+.save
+	ld [SaveScore], a
+	ld a, [MapCurrentRowPtr+0]
+	ld [SaveMapCurrentRowPtr+0], a
+	ld a, [MapCurrentRowPtr+1]
+	ld [SaveMapCurrentRowPtr+1], a
+	ld a, [PaletteCurrentRowPtr+0]
+	ld [SavePaletteCurrentRowPtr+0], a
+	ld a, [PaletteCurrentRowPtr+1]
+	ld [SavePaletteCurrentRowPtr+1], a
+	ld a, [CanDigDirt]
+	ld [SaveDig], a
+	ld a, [Sprite01+1]
+	ld [SavePosition], a
+	ld a, [CurrentPosture]
+	ld [SaveOrient], a
+.end_save
+.dont_scroll
 	ret
 .animation_speed
 	ld a, $00
@@ -423,6 +546,48 @@ Idle_Bank3:
 	ld a, $01
 	ld [AnimationIdle], a
 	call ResetPostureLeft
+	ret
+
+Switch_dig_dirt:
+	ld a, $84
+	call ResetSkill
+	ld a, %00000011
+	ld [Sprite01+3], a
+	ld [Sprite02+3], a
+	ld [Sprite03+3], a
+	ld [Sprite04+3], a
+	ret
+Switch_dig_stone:
+	ld a, $80
+	call ResetSkill
+	ld a, %00000010
+	ld [Sprite01+3], a
+	ld [Sprite02+3], a
+	ld [Sprite03+3], a
+	ld [Sprite04+3], a
+	ret
+Switch_dig_metal:
+	ld a, $86
+	call ResetSkill
+	ld a, %00000100
+	ld [Sprite01+3], a
+	ld [Sprite02+3], a
+	ld [Sprite03+3], a
+	ld [Sprite04+3], a
+	ld a, POSTURE_UPSIDEDOWN
+	ld [CurrentPosture], a
+	ld e, b
+	call ResetPostureRight
+	ld b, e
+	ret
+Switch_dig_alien:
+	ld a, $82
+	call ResetSkill
+	ld a, %00000001
+	ld [Sprite01+3], a
+	ld [Sprite02+3], a
+	ld [Sprite03+3], a
+	ld [Sprite04+3], a
 	ret
 
 ; \Param a: the value
@@ -541,45 +706,16 @@ RunGame_Bank3: ; buttons saved in b
 	ld [CanGoLeft], a
 	jr .check_potion
 .switch_dig_dirt
-	ld a, $84
-	call ResetSkill
-	ld a, %00000011
-	ld [Sprite01+3], a
-	ld [Sprite02+3], a
-	ld [Sprite03+3], a
-	ld [Sprite04+3], a
+	call Switch_dig_dirt
 	jr .go_inputs
 .switch_dig_stone
-	ld a, $80
-	call ResetSkill
-	ld a, %00000010
-	ld [Sprite01+3], a
-	ld [Sprite02+3], a
-	ld [Sprite03+3], a
-	ld [Sprite04+3], a
+	call Switch_dig_stone
 	jr .go_inputs
 .switch_dig_metal
-	ld a, $86
-	call ResetSkill
-	ld a, %00000100
-	ld [Sprite01+3], a
-	ld [Sprite02+3], a
-	ld [Sprite03+3], a
-	ld [Sprite04+3], a
-	ld a, POSTURE_UPSIDEDOWN
-	ld [CurrentPosture], a
-	ld e, b
-	call ResetPostureRight
-	ld b, e
+	call Switch_dig_metal
 	jr .go_inputs
 .switch_dig_alien
-	ld a, $82
-	call ResetSkill
-	ld a, %00000001
-	ld [Sprite01+3], a
-	ld [Sprite02+3], a
-	ld [Sprite03+3], a
-	ld [Sprite04+3], a
+	call Switch_dig_alien
 	jr .go_inputs
 .fall
 	call UpdatePtr
@@ -599,19 +735,113 @@ RunGame_Bank3: ; buttons saved in b
 	jr nz, .go_left
 	ld a, b
 	and PADF_A
-	jr nz, .go_a
-	jr .go_idle
+	jp nz, .go_a
+	ld a, b
+	and PADF_B
+	jr nz, .go_b
+	jp .go_idle
 .go_right
 	ld a, [CanGoRight]
 	cp $01
-	jr nz, .end_run_game
+	jp nz, .end_run_game
 	call GoRight_Bank3
-	jr .end_run_game
+	jp .end_run_game
 .go_left
 	ld a, [CanGoLeft]
 	cp $01
-	jr nz, .end_run_game
+	jp nz, .end_run_game
 	call GoLeft_Bank3
+	jp .end_run_game
+.go_b
+	ld a, [SaveScore]
+	ld [Score], a
+
+	ld d, $00
+.loop
+	cp 10
+	jr c, .end_loop
+	sub a, 10
+	inc d
+	jr .loop
+.end_loop
+	add a, $C0
+	ld [Sprite11+2], a
+	ld a, d
+	add a, $C0
+	ld [Sprite10+2], a
+	
+.end_modif_score
+
+	ld a, [SavePaletteCurrentRowPtr+0]
+	ld h, a
+	ld [PaletteCurrentRowPtr+0], a
+	ld a, [SavePaletteCurrentRowPtr+1]
+	ld l, a
+	ld [PaletteCurrentRowPtr+1], a
+	ld a, $01
+	ld [rVRAM_BANK], a
+	ld de, $0000-($0020*$0002)
+	add hl, de
+	ld de, _SCRN0
+	ld bc, 32*32
+	call mem_CopyVRAM
+
+	ld a, [SaveMapCurrentRowPtr+0]
+	ld h, a
+	ld [MapCurrentRowPtr+0], a
+	ld a, [SaveMapCurrentRowPtr+1]
+	ld l, a
+	ld [MapCurrentRowPtr+1], a
+	ld a, $00
+	ld [rVRAM_BANK], a
+	ld de, $0000-($0020*$0002)
+	add hl, de
+	ld de, _SCRN0
+	ld bc, 32*32
+	call mem_CopyVRAM
+
+	ld a, $00
+	ld [rSCY], a
+
+	ld a, 30
+	ld [MapCurrentRow], a
+	ld [PaletteCurrentRow], a
+
+	ld a, [SaveDig]
+	cp $84
+	jr z, .switch_save_dig_dirt
+	cp $80
+	jr z, .switch_save_dig_stone
+	cp $86
+	jr z, .switch_save_dig_metal
+	cp $82
+	jr z, .switch_save_dig_alien
+.switch_save_dig_dirt
+	call Switch_dig_dirt
+	jr .end_switch_dig
+.switch_save_dig_stone
+	call Switch_dig_stone
+	jr .end_switch_dig
+.switch_save_dig_metal
+	call Switch_dig_metal
+	jr .end_switch_dig
+.switch_save_dig_alien
+	call Switch_dig_alien
+.end_switch_dig
+
+	ld a, [SaveDig]
+	call ResetSkill
+	ld a, [SavePosition]
+	ld [Sprite01+1], a
+	ld [Sprite03+1], a
+	add a, $08
+	ld [Sprite02+1], a
+	ld [Sprite04+1], a
+
+	ld a, [SaveOrient]
+	ld [CurrentPosture], a
+	call ResetPostureRight
+
 	jr .end_run_game
 .go_a
 	ld a, $01
@@ -652,13 +882,20 @@ RunGame_Bank3: ; buttons saved in b
 	call UpdatePtr
 	jr .end_run_game
 .go_idle
-	ld a, [MapCurrentRowPtr]
-	cp $58
+	ld a, [Score]
+	cp 76
 	jr z, .victory
 	call Idle_Bank3
 .end_run_game
 	ret
 .victory
+	ld a, [AnimationEnd]
+	dec a
+	ld [AnimationEnd], a
+	cp $00
+	jr z, .true_victory
+	ret
+.true_victory
 	ld a, [CurrentLevel]
 	dec a
 	ld [CurrentLevel], a
