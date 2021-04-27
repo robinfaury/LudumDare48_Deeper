@@ -4,6 +4,7 @@
 
 ## Update
 The V2 is available! https://github.com/robinfaury/LudumDare48_Deeper/releases/tag/V2.0.0 
+
 This version should be out of the LudumDare competition. It provide:
  - B button to reset the level
  - the score
